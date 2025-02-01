@@ -1,0 +1,54 @@
+name: Build lazydocker for Debian
+
+on:
+  workflow_dispatch:
+    inputs:
+      lazydocker_version:
+        description: The version of lazydocker to build.
+        type: string
+        required: true
+      build_version:
+        description: The build version.
+        type: string
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  build-lazydocker:
+    name: Build
+    runs-on: ubuntu-latest    
+    steps:
+      - name: Checkout lazydocker-debian
+        uses: actions/checkout@v4
+
+      - name: Build lazydocker
+        run: ./build.sh ${{ inputs.lazydocker_version }} ${{ inputs.build_version }}
+      
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifact
+          path: lazydocker_*.deb
+
+
+  release-lazydocker:
+    name: (Draft-)Release lazydocker for Debian
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: build-lazydocker
+    steps:
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: artifact
+
+      - name: Publish Release Draft
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          files: lazydocker_*.deb
+          name: ${{ inputs.lazydocker_version }}+${{ inputs.build_version }}
+          tag_name: ${{ env.RELEASE_TAG }}
+          fail_on_unmatched_files: true
