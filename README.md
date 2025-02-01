@@ -26,7 +26,7 @@ Currently supported debian distros are:
 
 This is an unofficial community project to provide a package that's easy to
 install on Debian. If you're looking for the lazydocker source code, see
-[lazydocker-org/lazydocker](https://github.com/lazydocker-org/lazydocker).
+[lazydocker](https://github.com/jesseduffield/lazydocker/).
 
 ## Install/Update
 
