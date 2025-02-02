@@ -59,4 +59,3 @@ To update to a new version, just follow any of the installation methods above. T
 ## Disclaimer
 
 - This repo is not open for issues related to lazydocker. This repo is only for _unofficial_ Debian packaging.
-- This repository is based on the amazing work of [Mike Kasberg](https://github.com/mkasberg) and his [lazydocker Ubuntu](https://github.com/mkasberg/lazydocker-ubuntu) packages
