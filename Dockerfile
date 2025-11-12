@@ -9,7 +9,7 @@ ARG FULL_VERSION
 RUN apt update && apt install -y wget
 RUN mkdir -p /output/usr/bin
 RUN mkdir -p /output/usr/share/doc/lazydocker
-RUN cd /output/usr/bin && wget https://github.com/jesseduffield/lazydocker/releases/download/v${LAZYDOCKER_VERSION}/lazydocker_${LAZYDOCKER_VERSION}_Linux_x86_64.tar.gz && tar -xf lazydocker_${LAZYDOCKER_VERSION}_Linux_x86_64.tar.gz && rm -f lazydocker_${LAZYDOCKER_VERSION}_Linux_x86_64.tar.gz && rm -fRd LICENSE README.md 
+RUN cd /output/usr/bin && wget https://github.com/dariogriffo/lazydocker/releases/download/v${LAZYDOCKER_VERSION}/lazydocker_${LAZYDOCKER_VERSION}_Linux_x86_64.tar.gz && tar -xf lazydocker_${LAZYDOCKER_VERSION}_Linux_x86_64.tar.gz && rm -f lazydocker_${LAZYDOCKER_VERSION}_Linux_x86_64.tar.gz && rm -fRd LICENSE README.md 
 RUN mkdir -p /output/DEBIAN
 
 COPY output/DEBIAN/control /output/DEBIAN/
