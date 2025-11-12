@@ -5,11 +5,13 @@ ARG DEBIAN_DIST
 ARG LAZYDOCKER_VERSION
 ARG BUILD_VERSION
 ARG FULL_VERSION
+ARG ARCH
+ARG LAZYDOCKER_RELEASE
 
 RUN apt update && apt install -y wget
 RUN mkdir -p /output/usr/bin
 RUN mkdir -p /output/usr/share/doc/lazydocker
-RUN cd /output/usr/bin && wget https://github.com/dariogriffo/lazydocker/releases/download/v${LAZYDOCKER_VERSION}/lazydocker_${LAZYDOCKER_VERSION}_Linux_x86_64.tar.gz && tar -xf lazydocker_${LAZYDOCKER_VERSION}_Linux_x86_64.tar.gz && rm -f lazydocker_${LAZYDOCKER_VERSION}_Linux_x86_64.tar.gz && rm -fRd LICENSE README.md 
+COPY ${LAZYDOCKER_RELEASE}/lazydocker /output/usr/bin/
 RUN mkdir -p /output/DEBIAN
 
 COPY output/DEBIAN/control /output/DEBIAN/
@@ -22,6 +24,7 @@ RUN sed -i "s/FULL_VERSION/$FULL_VERSION/" /output/usr/share/doc/lazydocker/chan
 RUN sed -i "s/DIST/$DEBIAN_DIST/" /output/DEBIAN/control
 RUN sed -i "s/LAZYDOCKER_VERSION/$LAZYDOCKER_VERSION/" /output/DEBIAN/control
 RUN sed -i "s/BUILD_VERSION/$BUILD_VERSION/" /output/DEBIAN/control
+RUN sed -i "s/SUPPORTED_ARCHITECTURES/$ARCH/" /output/DEBIAN/control
 
 RUN dpkg-deb --build /output /lazydocker_${FULL_VERSION}.deb
 
