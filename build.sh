@@ -53,7 +53,7 @@ build_architecture() {
     rm -f "lazydocker_${LAZYDOCKER_VERSION}_${lazydocker_release}.tar.gz" || true
     
     # Download and extract lazydocker binary for this architecture
-        if ! wget "https://github.com/dariogriffo/lazydocker/releases/download/v${LAZYDOCKER_VERSION}/lazydocker_${LAZYDOCKER_VERSION}_${lazydocker_release}.tar.gz"; then
+        if ! wget "https://github.com/jesseduffield/lazydocker/releases/download/v${LAZYDOCKER_VERSION}/lazydocker_${LAZYDOCKER_VERSION}_${lazydocker_release}.tar.gz"; then
             echo "❌ Failed to download lazydocker binary for $build_arch"
             return 1
         fi
