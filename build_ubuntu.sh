@@ -47,7 +47,7 @@ build_architecture() {
         return 1
     fi
 
-    declare -a arr=("jammy" "noble")
+    declare -a arr=("jammy" "noble" "questing")
 
     for dist in "${arr[@]}"; do
         FULL_VERSION="$LAZYDOCKER_VERSION-${BUILD_VERSION}+${dist}_${build_arch}_ubu"
