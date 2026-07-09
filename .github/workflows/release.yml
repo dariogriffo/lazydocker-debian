@@ -29,37 +29,67 @@ permissions:
 jobs:
   build-lazydocker:
     name: Build
-    runs-on: ubuntu-latest    
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout lazydocker-debian
         uses: actions/checkout@v4
 
       - name: Build lazydocker
         run: ./build.sh ${{ inputs.lazydocker_version }} ${{ inputs.build_version }} ${{ inputs.architecture }}
-      
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: artifact
           path: lazydocker_*.deb
 
+  build-src:
+    name: Build Source Packages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout lazydocker-debian
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends dpkg-dev devscripts wget ca-certificates
+
+      - name: Build source packages
+        run: ./build_src.sh ${{ inputs.lazydocker_version }} ${{ inputs.build_version }}
+
+      - name: Upload source artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-artifact
+          path: |
+            lazydocker_*.dsc
+            lazydocker_*.orig.tar.gz
+            lazydocker_*.debian.tar.xz
 
   release-lazydocker:
-    name: (Draft-)Release lazydocker for Debian
+    name: Release lazydocker for Debian
     if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    needs: build-lazydocker
+    needs: [build-lazydocker, build-src]
     steps:
-      - name: Download All Artifacts
+      - name: Download binary artifacts
         uses: actions/download-artifact@v4
         with:
           name: artifact
 
-      - name: Publish Release Draft
+      - name: Download source artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: source-artifact
+
+      - name: Publish Release
         uses: softprops/action-gh-release@v2
         with:
-          draft: true
-          files: lazydocker_*.deb
+          draft: false
+          files: |
+            lazydocker_*.deb
+            lazydocker_*.dsc
+            lazydocker_*.orig.tar.gz
+            lazydocker_*.debian.tar.xz
           name: ${{ inputs.lazydocker_version }}+${{ inputs.build_version }}
-          tag_name: ${{ env.RELEASE_TAG }}
+          tag_name: ${{ inputs.lazydocker_version }}+${{ inputs.build_version }}
           fail_on_unmatched_files: true
