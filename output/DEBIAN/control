@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Dario Griffo <dariogriffo@gmail.com>
 Homepage: https://github.com/jesseduffield/lazydocker
 Package: lazydocker
-Version: LAZYDOCKER_VERSION-BUILD_VERSION+DIST
+Version: LAZYDOCKER_VERSION-BUILD_VERSION~DIST
 Architecture: SUPPORTED_ARCHITECTURES
 Depends:
 Description: A simple terminal UI for both docker and docker-compose, written in Go with the gocui library.
