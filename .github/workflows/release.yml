@@ -34,6 +34,11 @@ jobs:
       - name: Checkout lazydocker-debian
         uses: actions/checkout@v4
 
+      - name: Validate upstream license permits paid distribution
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: ./validate_license.sh ${{ inputs.lazydocker_version }}
+
       - name: Build lazydocker
         run: ./build.sh ${{ inputs.lazydocker_version }} ${{ inputs.build_version }} ${{ inputs.architecture }}
 
