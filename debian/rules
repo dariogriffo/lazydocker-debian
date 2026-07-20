@@ -1,0 +1,41 @@
+#!/usr/bin/make -f
+DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
+PKG_VERSION := $(shell dpkg-parsechangelog -S Version | sed 's/[-~].*//')
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+
+override_dh_auto_build:
+	@arch="$(DEB_HOST_ARCH)"; \
+	case "$$arch" in \
+		amd64)  RELEASE="lazydocker_$(PKG_VERSION)_Linux_x86_64" ;; \
+		arm64)  RELEASE="lazydocker_$(PKG_VERSION)_Linux_arm64" ;; \
+		armhf)  RELEASE="lazydocker_$(PKG_VERSION)_Linux_armv7" ;; \
+		armel)  RELEASE="lazydocker_$(PKG_VERSION)_Linux_armv6" ;; \
+		i386)   RELEASE="lazydocker_$(PKG_VERSION)_Linux_x86" ;; \
+		*) echo "Unsupported architecture: $$arch"; exit 1 ;; \
+	esac; \
+	echo "Downloading $$RELEASE for $(PKG_VERSION)..."; \
+	wget -q "https://github.com/jesseduffield/lazydocker/releases/download/v$(PKG_VERSION)/$$RELEASE.tar.gz"; \
+	mkdir -p "$$RELEASE"; \
+	tar -xf "$$RELEASE.tar.gz" -C "$$RELEASE"; \
+	rm -f "$$RELEASE.tar.gz"; \
+	echo "$$RELEASE" > .lazydocker_release_name
+
+override_dh_auto_install:
+	@RELEASE=$$(cat .lazydocker_release_name); \
+	install -D -m 755 "$$RELEASE/lazydocker" debian/lazydocker/usr/bin/lazydocker
+
+override_dh_auto_test:
+
+override_dh_auto_clean:
+	@if [ -f .lazydocker_release_name ]; then \
+		RELEASE=$$(cat .lazydocker_release_name); \
+		rm -rf "$$RELEASE" .lazydocker_release_name || true; \
+	fi
+
+override_dh_strip:
+
+override_dh_shlibdeps:

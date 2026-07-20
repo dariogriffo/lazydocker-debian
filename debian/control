@@ -1,0 +1,15 @@
+Source: lazydocker
+Section: utils
+Priority: optional
+Maintainer: Dario Griffo <dariogriffo@gmail.com>
+Build-Depends: debhelper-compat (= 13), wget, ca-certificates
+Standards-Version: 4.6.2
+Homepage: https://github.com/jesseduffield/lazydocker
+Rules-Requires-Root: no
+
+Package: lazydocker
+Architecture: amd64 arm64 armel armhf i386
+Depends: ${misc:Depends}
+Description: A simple terminal UI for both docker and docker-compose
+ lazydocker is a terminal UI for managing Docker containers, images, volumes,
+ and networks. It provides an easy-to-use interface for common Docker tasks.
