@@ -1,4 +1,4 @@
-lazydocker (FULL_VERSION) DIST; urgency=low
+lazydocker (FULL_VERSION) stable; urgency=low
 
   fix: Properly support remote docker daemon over ssh by @rajiv-k in #511
   fix lazydocker breaking when having default context in config by @peauc in #552
